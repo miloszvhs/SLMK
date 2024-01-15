@@ -1,3 +1,4 @@
+using Core.Entities;
 using FluentNHibernate;
 using Hangfire;
 using Hangfire.MemoryStorage;

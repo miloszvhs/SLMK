@@ -1,0 +1,32 @@
+﻿@model IEnumerable<Core.Entities.Flight>
+@{
+    ViewData["Title"] = "Flight Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Flights</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Departure</th>
+                <th scope="col">Destination</th>
+                <th scope="col">AvailableSeats</th>
+                <th scope="col">FlightDate</th>
+                <th scope="col">Price</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Departure</td>
+                <td>@item.Destination</td>
+                <td>@item.AvailableSeats</td>
+                <td>@item.FlightDate</td>
+                <td>@item.Price</td>
+                <td>@Html.ActionLink("Book", "Book", new { flightId=item.Id })</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>

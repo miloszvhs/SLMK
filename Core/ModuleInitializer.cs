@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using Core.Repositories;
 using Core.Services;
 using Core.Upgrades;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,6 +17,10 @@ public class ModuleInitializer : IModuleInitializer
         
         services.AddSingleton<ISqlExecutor, Upgrade1>();
         services.AddSingleton<ISqlExecutor, Upgrade2>();
+        services.AddSingleton<ISqlExecutor, Upgrade3>();
+
+        services.AddSingleton<IReservationRepository, ReservationRepository>();
+        services.AddSingleton<IFlightRepository, FlightRepository>();
     }
 }
 

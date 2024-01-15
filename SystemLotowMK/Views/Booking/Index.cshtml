@@ -1,0 +1,28 @@
+﻿@model IEnumerable<Core.Entities.Reservation>
+@{
+    ViewData["Title"] = "Booking Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Your bookings</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Flight</th>
+                <th scope="col">Status</th>
+                <th scope="col">ReservationDate</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Flight.Id</td>
+                    <td>@item.Status</td>
+                    <td>@item.ReservationDate</td>
+                    <td>@Html.ActionLink("Cancel", "Cancel", new { reservationId=item.Id })</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

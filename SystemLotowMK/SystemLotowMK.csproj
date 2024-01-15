@@ -28,11 +28,12 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Pages\" />
+      <AdditionalFiles Include="Views\Account\Login.cshtml" />
+      <AdditionalFiles Include="Views\Booking\Index.cshtml" />
     </ItemGroup>
 
     <ItemGroup>
-      <AdditionalFiles Include="Views\Account\Login.cshtml" />
+      <Folder Include="Pages\" />
     </ItemGroup>
 
 </Project>

@@ -84,6 +84,13 @@ public class AccountController : Controller
         await _signInManager.SignOutAsync();
         return RedirectToAction(nameof(HomeController.Index), "Home");
     }
+    
+    [HttpGet]
+    public async Task<IActionResult> Details()
+    {
+        var user = await _userManager.GetUserAsync(User);
+        return View(user);
+    }
 
     private IActionResult RedirectToLocal(string returnUrl)
     {

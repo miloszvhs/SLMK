@@ -107,10 +107,14 @@ public class Upgrade2 : ISqlExecutor
         var sql = @"
         CREATE TABLE IF NOT EXISTS Reservations (
             Id SERIAL PRIMARY KEY,
-            UserID TEXT REFERENCES aspnet_users(Id),
+            UserID TEXT NOT NULL,
             FlightID INT REFERENCES Flights(Id),
             ReservationDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            Status TEXT NOT NULL
+            Status TEXT NOT NULL,
+            constraint fk_flights_id foreign key (FlightID)
+            references public.flights (id) match simple
+            on update cascade
+            on delete cascade
         );";
 
         session
