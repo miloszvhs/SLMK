@@ -1,21 +1,37 @@
-using Core.Entities;
-using FluentNHibernate;
+using FluentValidation.AspNetCore;
 using Hangfire;
 using Hangfire.MemoryStorage;
-using NHibernate.NetCore;
-using NHibernate.AspNetCore.Identity;
-using NHibernate.Cfg;
-using ORM;
-using ORM.Contract.Interfaces;
+using Microsoft.AspNetCore.Identity;
 using Serilog;
 using Serilog.Events;
-using NHIdentityUser = NHibernate.AspNetCore.Identity.IdentityUser;
-using NHIdentityRole = NHibernate.AspNetCore.Identity.IdentityRole;
+using SystemLotowMK.Application;
+using SystemLotowMK.Domain;
+using SystemLotowMK.Domain.Entities;
+using SystemLotowMK.Infrastructure;
+using SystemLotowMK.Infrastructure.ApplicationContexts;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddFluentValidation();
+
+builder.Services.AddDomainLayer();
+builder.Services.AddInfrastructureLayer(builder.Configuration);
+builder.Services.AddApplicationLayer();
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+//add identity user
+builder.Services.AddIdentity<User, IdentityRole>(config =>
+{
+    config.Password.RequiredLength = 8;
+    config.Password.RequireDigit = false;
+    config.Password.RequireNonAlphanumeric = false;
+    config.Password.RequireUppercase = false;
+    config.Password.RequireLowercase = false;
+})
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultTokenProviders();
 
 builder.Logging.AddSerilog(new LoggerConfiguration()
     .MinimumLevel.Debug()
@@ -32,8 +48,6 @@ builder.Services.AddHangfire(config =>
 });
 
 builder.Services.AddHangfireServer();
-
-builder.Services.AddEnabledModules();
 
 builder.Services.AddAuthentication("CookieAuth")
     .AddCookie("CookieAuth", config =>
@@ -55,23 +69,6 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
-
-var cfg = new Configuration();
-var file = Path.Combine(
-    AppDomain.CurrentDomain.BaseDirectory + "\\resources",
-    "hibernate.config");
-cfg.Configure(file);
-cfg.AddIdentityMappings();
-
-var assemblies = AppDomain.CurrentDomain.GetAssemblies();
-var specificAssemblies = assemblies.Where(x => x.GetTypes().Any(y => typeof(IMappingFromAssembly).IsAssignableFrom(y)));
-                
-foreach (var assembly in specificAssemblies)
-    cfg.AddMappingsFromAssembly(assembly);
-
-builder.Services.AddHibernate(cfg);
-builder.Services.AddIdentity<NHIdentityUser, NHIdentityRole>()
-    .AddHibernateStores();
 
 builder.Services.AddHttpContextAccessor();
 
@@ -97,10 +94,5 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-
-app.Services.AddConnectionStrings();
-
-app.Services.GetService<ModuleConfigurationService>().ConfigureModules();
-
 
 app.Run();

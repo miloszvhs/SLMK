@@ -17,8 +17,8 @@
               @if (User.Identity.IsAuthenticated)
               {
                 <li><a class="navbar-brand" asp-area="" asp-controller="Flight" asp-action="Index">Flights</a></li>
-                <li><a class="navbar-brand" asp-area="" asp-controller="Booking" asp-action="Index">Bookings</a></li>
-                <li><a class="navbar-brand" asp-area="" asp-controller="Account" asp-action="Details">Account</a></li>  
+                <li><a class="navbar-brand" asp-area="" asp-controller="Reservation" asp-action="Index">Bookings</a></li>
+                <li><a class="navbar-brand" asp-area="" asp-controller="User" asp-action="Details">Account</a></li>  
               }
                 <li><a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
           </ul>

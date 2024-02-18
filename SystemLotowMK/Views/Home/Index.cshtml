@@ -10,15 +10,15 @@
         <p>
             Hello @User.Identity.Name!
         </p>
-        <form asp-controller="Account" asp-action="Logout" method="post">
+        <form asp-controller="User" asp-action="Logout" method="post">
             <button class="btn btn-primary" type="submit">Logout</button>
         </form>
     }
     else
     {
         <p>
-            <a class="btn btn-primary" href="~/Account/Login">Login</a>
-            <a class="btn btn-primary" href="~/Account/Register">Register</a>
+            <a class="btn btn-primary" href="~/User/Login">Login</a>
+            <a class="btn btn-primary" href="~/User/Register">Register</a>
         </p>
     }
 </div>
