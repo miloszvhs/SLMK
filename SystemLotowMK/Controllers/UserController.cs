@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Core.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using SystemLotowMK.Application.Services;
 using SystemLotowMK.Controllers;
 using SystemLotowMK.Domain.Entities;
 using SystemLotowMK.Models;
@@ -11,11 +13,13 @@ public class UserController : Controller
 {
     private readonly UserManager<User> _userManager;
     private readonly SignInManager<User> _signInManager;
+    private readonly IPaymentService _paymentService;
 
-    public UserController(UserManager<User> userManager, SignInManager<User> signInManager)
+    public UserController(UserManager<User> userManager, SignInManager<User> signInManager, IPaymentService paymentService)
     {
         _userManager = userManager;
         _signInManager = signInManager;
+        _paymentService = paymentService;
     }
 
     [HttpGet]
@@ -102,5 +106,12 @@ public class UserController : Controller
         {
             return RedirectToAction(nameof(HomeController.Index), "Home");
         }
+    }
+
+    public IActionResult Payment()
+    {
+        var user = _signInManager.UserManager.GetUserAsync(User).Result;
+        var payments =  _paymentService.GetPaymentsForUser(user);
+        return View(payments);
     }
 }

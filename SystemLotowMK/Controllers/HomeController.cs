@@ -38,7 +38,7 @@ public class HomeController : Controller
     }
 
     [Authorize]
-    public IActionResult Bookings()
+    public IActionResult Reservations()
     {
         return RedirectToAction(nameof(HomeController.Index), "Home");
     }

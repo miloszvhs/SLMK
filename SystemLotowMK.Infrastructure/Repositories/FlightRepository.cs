@@ -1,4 +1,5 @@
-﻿using SystemLotowMK.Domain.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using SystemLotowMK.Domain.Entities;
 using SystemLotowMK.Domain.Interfaces.Infrastructure;
 using SystemLotowMK.Infrastructure.ApplicationContexts;
 
@@ -14,9 +15,9 @@ public class FlightRepository : IFlightRepository
     }
 
 
-    public Flight GetFlight(int id) => _dbContext.Flights.SingleOrDefault(x => x.Id == id);
+    public Flight? GetFlight(int id) => _dbContext.Flights.Include(x => x.Seats).SingleOrDefault(x => x.Id == id);
 
-    public List<Flight> GetFlights() => _dbContext.Flights.ToList();
+    public List<Flight> GetFlights() => _dbContext.Flights.Include(x => x.Seats).ThenInclude(x => x.Reservation).ToList();
 
     public void AddFlight(Flight flight)
     {

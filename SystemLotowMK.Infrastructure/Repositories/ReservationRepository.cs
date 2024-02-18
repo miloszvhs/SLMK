@@ -1,4 +1,5 @@
-﻿using SystemLotowMK.Domain.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using SystemLotowMK.Domain.Entities;
 using SystemLotowMK.Domain.Interfaces.Infrastructure;
 using SystemLotowMK.Infrastructure.ApplicationContexts;
 
@@ -14,11 +15,20 @@ public class ReservationRepository : IReservationRepository
     }
 
     public List<Reservation> GetReservationsByUser(string userId) 
-        => _dbContext.Reservations.Where(x => x.UserId == userId).ToList();
+        => _dbContext
+            .Reservations
+            .Where(x => x.UserId == userId)
+            .Include(x => x.Seat)
+            .ThenInclude(x => x.Flight)
+            .Include(x => x.Payment)
+            .ToList();
                 
-
-    public Reservation GetReservationById(int id, string userId) 
-        => _dbContext.Reservations.SingleOrDefault(x => x.Id == id && x.UserId == userId);
+    public Reservation? GetReservationById(int id, string userId) 
+        => _dbContext
+            .Reservations
+            .Include(x => x.Seat.Flight)
+            .Where(x => x.Id == id)
+            .SingleOrDefault(x => x.UserId == userId);
 
     public void AddReservation(Reservation reservation)
     {

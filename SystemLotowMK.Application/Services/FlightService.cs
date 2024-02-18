@@ -22,10 +22,22 @@ public class FlightService : IFlightService
     {
         
     }
+    
+    public bool CheckSeatsAvailability(int flightId)
+    {
+        var flight = _flightRepository.GetFlight(flightId);
+        var seats = flight.Seats.Where(x => x.Reservation == null).ToList();
+        
+        return seats.Any();
+    }
+
+    public Flight? GetFlight(int flightId) => _flightRepository.GetFlight(flightId);
 }
 
 public interface IFlightService
 {
     public List<Flight> GetAllFlights();
     void CreateReservationForUser(int flightId, string userId);
+    bool CheckSeatsAvailability(int flightId);
+    Flight? GetFlight(int flightId);
 }

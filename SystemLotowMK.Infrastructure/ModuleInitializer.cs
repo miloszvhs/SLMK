@@ -16,6 +16,7 @@ public static class ModuleInitializer
             options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
         services.AddScoped<IReservationRepository, ReservationRepository>();
         services.AddScoped<IFlightRepository, FlightRepository>();
+        services.AddScoped<IPaymentRepository, PaymentRepository>();
         return services;
     }
 }

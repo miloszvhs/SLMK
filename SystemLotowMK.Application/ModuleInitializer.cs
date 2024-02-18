@@ -1,6 +1,9 @@
 ﻿using FluentValidation;
+using Hangfire;
 using Microsoft.Extensions.DependencyInjection;
 using SystemLotowMK.Application.Dto;
+using SystemLotowMK.Application.Interfaces;
+using SystemLotowMK.Application.Jobs;
 using SystemLotowMK.Application.Services;
 using SystemLotowMK.Domain.Entities;
 
@@ -12,6 +15,8 @@ public static class ModuleInitializer
     {
         services.AddScoped<IFlightService, FlightService>();
         services.AddScoped<IReservationService, ReservationService>();
+        services.AddScoped<IPaymentService, PaymentService>();
+        services.AddScoped<IJob, PaymentObserver>();
         
         services.AddValidations();
         return services;
@@ -22,4 +27,13 @@ public static class ModuleInitializer
         services.AddSingleton<IValidator<FlightDto>, FlightDtoValidator>();
         services.AddSingleton<IValidator<ReservationDto>, ReservationDtoValidator>();
     }
+    
+    // public static IServiceProvider ConfigureApplicationModule(this IServiceProvider serviceProvider)
+    // {
+    //     var paymentObserver = serviceProvider.GetRequiredService<PaymentObserver>();
+    //     
+    //     RecurringJob.AddOrUpdate(() => paymentObserver.Observe(), Cron.Minutely);
+    //     
+    //     return serviceProvider;
+    // }
 }

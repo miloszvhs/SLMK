@@ -54,9 +54,107 @@ public class ApplicationDbContext : IdentityDbContext<User>
              .HasMany(u => u.Reservations)
              .WithOne(r => r.User)
              .HasForeignKey(r => r.UserId);
+
+         SeedData(modelBuilder);
     }
-    
-    
+
+    private void SeedData(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<User>()
+            .Navigation(x => x.Reservations)
+            .AutoInclude();
+        
+        modelBuilder.Entity<Flight>()
+            .Navigation(x => x.Seats)
+            .AutoInclude();
+        
+        modelBuilder.Entity<Seat>()
+            .Navigation(x => x.Reservation)
+            .AutoInclude();
+        
+        modelBuilder.Entity<Reservation>()
+            .Navigation(x => x.Payment)
+            .AutoInclude();
+        
+        modelBuilder.Entity<Payment>()
+            .Navigation(x => x.Reservation)
+            .AutoInclude();
+        
+        modelBuilder.Entity<Flight>().HasData(
+            new Flight
+            {
+                Id = 1,
+                Departure = "Warsaw",
+                Destination = "New York",
+                DepartureTime = DateTime.UtcNow.AddDays(1),
+                ArrivalTime = DateTime.UtcNow.AddDays(1).AddHours(8),
+                Price = 1000,
+                FlightNumber = "LO123"
+            },
+            new Flight
+            {
+                Id = 2,
+                Departure = "New York",
+                Destination = "Warsaw",
+                DepartureTime = DateTime.UtcNow.AddDays(2),
+                ArrivalTime = DateTime.UtcNow.AddDays(2).AddHours(8),
+                Price = 900,
+                FlightNumber = "LO123"
+            }
+        );
+        
+        modelBuilder.Entity<Seat>().HasData(
+            new Seat
+            {
+                Id = 1,
+                FlightId = 1,
+                Number = "1A"
+            },
+            new Seat
+            {
+                Id = 2,
+                FlightId = 1,
+                Number = "1B"
+            },
+            new Seat
+            {
+                Id = 3,
+                FlightId = 1,
+                Number = "2A"
+            },
+            new Seat
+            {
+                Id = 4,
+                FlightId = 1,
+                Number = "2B"
+            },
+            new Seat
+            {
+                Id = 5,
+                FlightId = 2,
+                Number = "1A"
+            },
+            new Seat
+            {
+                Id = 6,
+                FlightId = 2,
+                Number = "1B"
+            },
+            new Seat
+            {
+                Id = 7,
+                FlightId = 2,
+                Number = "2A"
+            },
+            new Seat
+            {
+                Id = 8,
+                FlightId = 2,
+                Number = "2B"
+            }
+        );
+    }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseNpgsql("Server=localhost;Port=5432;Database=slmk_main;User Id=SLMK;Password=Test12345;");

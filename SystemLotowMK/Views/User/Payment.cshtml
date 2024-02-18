@@ -1,0 +1,39 @@
+﻿@model IEnumerable<SystemLotowMK.Domain.Entities.Payment>
+
+@{
+    ViewData["Title"] = "Payment";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Your payments</title>
+</head>
+<body>
+<div class="view">
+    <table class="table table-bordered table-sm">
+        <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.Id)</th>
+            <th>@Html.DisplayNameFor(model => model.PaymentDate)</th>
+            <th>@Html.DisplayNameFor(model => model.Amount)</th>
+            <th>@Html.DisplayNameFor(model => model.Reservation)</th>
+            <th>@Html.DisplayNameFor(model => model.Status)</th>
+        </tr>
+        @foreach(var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(model => item.Id)</td>
+                <td>@Html.DisplayFor(model => item.PaymentDate)</td>
+                <td>@Html.DisplayFor(model => item.Amount)</td>
+                <td>@Html.ActionLink("Show reservation", "Reservation", "Reservation", new { reservationId = item.Reservation.Id, userId = item.Reservation.UserId })</td>
+                <td>@Html.DisplayFor(model => item.Status)</td>
+            </tr>
+        }
+    </thead>
+    </table>
+    <a class="btn btn-primary" href="~/">Back</a>
+</div>
+</body>
+</html>

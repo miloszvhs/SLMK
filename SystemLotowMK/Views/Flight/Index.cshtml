@@ -13,20 +13,31 @@
                 <th scope="col">Available seats</th>
                 <th scope="col">Arrival time</th>
                 <th scope="col">Departure time</th>
+                <th scope="col">Direct time</th>
                 <th scope="col">Price</th>
             </tr>
         </thead>
         <tbody>
         @foreach (var item in Model)
         {
+            var time = item.ArrivalTime - item.DepartureTime;
+            var seats = @item.Seats.Where(x => x.Reservation == null).Count();
             <tr>
                 <td>@item.FlightNumber</td>
                 <td>@item.Destination</td>
-                <td>@item.Seats.Count</td>
+                <td>@seats</td>
                 <td>@item.ArrivalTime</td>
                 <td>@item.DepartureTime</td>
+                <td>@time.Hours:@time.Minutes</td>
                 <td>@item.Price</td>
-                <td>@Html.ActionLink("Book", "Book", new { flightId=item.Id })</td>
+                @if(seats > 0)
+                {
+                    <td>@Html.ActionLink("Book", "Book", new { flightId=item.Id })</td>
+                }
+                else
+                {
+                    <td>Flight is full</td>
+                }
             </tr>
         }
         </tbody>

@@ -1,0 +1,34 @@
+﻿@model SystemLotowMK.Domain.Entities.Reservation
+
+@{
+    ViewData["Title"] = "Reservation";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Reservation</title>
+</head>
+<body>
+<div>
+    <table class="table table-bordered table-sm">
+        <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.Id)</th>
+            <th>@Html.DisplayNameFor(model => model.Seat)</th>
+            <th>@Html.DisplayNameFor(model => model.Seat.Flight.Destination)</th>
+            <th>@Html.DisplayNameFor(model => model.Payment.Status)</th>
+        </tr>
+        <tr>
+            <td>@Html.DisplayFor(model => model.Id)</td>
+            <td>@Html.DisplayFor(model => model.Seat.Number)</td>
+            <td>@Html.DisplayFor(model => model.Seat.Flight.Destination)</td>
+            <td>@Html.DisplayFor(model => model.Payment.Status)</td>
+        </tr>
+        </thead>
+    </table>
+    <a class="btn btn-primary" href="~/">Back</a>
+</div>
+</body>
+</html>

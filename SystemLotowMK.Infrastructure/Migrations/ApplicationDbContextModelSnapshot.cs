@@ -165,6 +165,10 @@ namespace SystemLotowMK.Infrastructure.Migrations
                     b.Property<DateTime>("ArrivalTime")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("Departure")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<DateTime>("DepartureTime")
                         .HasColumnType("timestamp with time zone");
 
@@ -176,16 +180,34 @@ namespace SystemLotowMK.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Origin")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<decimal>("Price")
                         .HasColumnType("numeric");
 
                     b.HasKey("Id");
 
                     b.ToTable("Flights", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            ArrivalTime = new DateTime(2024, 2, 20, 3, 39, 57, 540, DateTimeKind.Utc).AddTicks(8010),
+                            Departure = "Warsaw",
+                            DepartureTime = new DateTime(2024, 2, 19, 19, 39, 57, 540, DateTimeKind.Utc).AddTicks(8006),
+                            Destination = "New York",
+                            FlightNumber = "LO123",
+                            Price = 1000m
+                        },
+                        new
+                        {
+                            Id = 2,
+                            ArrivalTime = new DateTime(2024, 2, 21, 3, 39, 57, 540, DateTimeKind.Utc).AddTicks(8014),
+                            Departure = "New York",
+                            DepartureTime = new DateTime(2024, 2, 20, 19, 39, 57, 540, DateTimeKind.Utc).AddTicks(8013),
+                            Destination = "Warsaw",
+                            FlightNumber = "LO123",
+                            Price = 900m
+                        });
                 });
 
             modelBuilder.Entity("SystemLotowMK.Domain.Entities.Payment", b =>
@@ -203,6 +225,9 @@ namespace SystemLotowMK.Infrastructure.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("ReservationId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Status")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
@@ -249,7 +274,7 @@ namespace SystemLotowMK.Infrastructure.Migrations
                     b.Property<int>("FlightId")
                         .HasColumnType("integer");
 
-                    b.Property<string>("SeatNumber")
+                    b.Property<string>("Number")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -258,6 +283,56 @@ namespace SystemLotowMK.Infrastructure.Migrations
                     b.HasIndex("FlightId");
 
                     b.ToTable("Seats", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            FlightId = 1,
+                            Number = "1A"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            FlightId = 1,
+                            Number = "1B"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            FlightId = 1,
+                            Number = "2A"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            FlightId = 1,
+                            Number = "2B"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            FlightId = 2,
+                            Number = "1A"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            FlightId = 2,
+                            Number = "1B"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            FlightId = 2,
+                            Number = "2A"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            FlightId = 2,
+                            Number = "2B"
+                        });
                 });
 
             modelBuilder.Entity("SystemLotowMK.Domain.Entities.User", b =>

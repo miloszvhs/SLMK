@@ -1,10 +1,11 @@
-﻿@model IEnumerable<SystemLotowMK.Domain.Entities.Reservation>
+﻿@using SystemLotowMK.Domain.Entities
+@model IEnumerable<SystemLotowMK.Domain.Entities.Reservation>
 @{
     ViewData["Title"] = "Booking Page";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Your bookings</h1>
+    <h1 class="display-4">Your reservations</h1>
     <table class="table">
         <thead>
             <tr>
@@ -13,18 +14,24 @@
                 <th scope="col">Arrival time</th>
                 <th scope="col">Departure time</th>
                 <th scope="col">Price</th>
+                <th scope="col">Payment status</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var item in Model)
             {
                 <tr>
-                    <td>@item.Seat.SeatNumber</td>
+                    <td>@item.Seat.Number</td>
                     <td>@item.Seat.Flight.FlightNumber</td>
                     <td>@item.Seat.Flight.ArrivalTime</td>
                     <td>@item.Seat.Flight.DepartureTime</td>
                     <td>@item.Seat.Flight.Price</td>
-                    <td>@Html.ActionLink("Delete", "Delete", new { reservationId=item.Id })</td>
+                    <td>@item?.Payment.Status</td>
+                    @if(item.Payment.Status != PaymentStatus.Paid)
+                    {
+                        <td>@Html.ActionLink("Pay", "Pay", "Payment", new { reservationId=item.Id })</td>
+                        <td>@Html.ActionLink("Cancel", "Cancel", new { reservationId=item.Id })</td>
+                    }
                 </tr>
             }
         </tbody>

@@ -4,6 +4,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace SystemLotowMK.Infrastructure.Migrations
 {
     /// <inheritdoc />
@@ -35,9 +37,9 @@ namespace SystemLotowMK.Infrastructure.Migrations
                     FlightNumber = table.Column<string>(type: "text", nullable: false),
                     DepartureTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     ArrivalTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Origin = table.Column<string>(type: "text", nullable: false),
                     Destination = table.Column<string>(type: "text", nullable: false),
-                    Price = table.Column<decimal>(type: "numeric", nullable: false)
+                    Price = table.Column<decimal>(type: "numeric", nullable: false),
+                    Departure = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -49,8 +51,6 @@ namespace SystemLotowMK.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "text", nullable: false),
-                    FirstName = table.Column<string>(type: "text", nullable: false),
-                    LastName = table.Column<string>(type: "text", nullable: false),
                     UserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
@@ -98,7 +98,7 @@ namespace SystemLotowMK.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    SeatNumber = table.Column<string>(type: "text", nullable: false),
+                    Number = table.Column<string>(type: "text", nullable: false),
                     FlightId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
@@ -242,6 +242,30 @@ namespace SystemLotowMK.Infrastructure.Migrations
                         principalTable: "Reservations",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "Flights",
+                columns: new[] { "Id", "ArrivalTime", "Departure", "DepartureTime", "Destination", "FlightNumber", "Price" },
+                values: new object[,]
+                {
+                    { 1, new DateTime(2024, 2, 19, 9, 22, 28, 722, DateTimeKind.Utc).AddTicks(9225), "Warsaw", new DateTime(2024, 2, 19, 1, 22, 28, 722, DateTimeKind.Utc).AddTicks(9221), "New York", "LO123", 1000m },
+                    { 2, new DateTime(2024, 2, 20, 9, 22, 28, 722, DateTimeKind.Utc).AddTicks(9229), "New York", new DateTime(2024, 2, 20, 1, 22, 28, 722, DateTimeKind.Utc).AddTicks(9228), "Warsaw", "LO123", 900m }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Seats",
+                columns: new[] { "Id", "FlightId", "Number" },
+                values: new object[,]
+                {
+                    { 1, 1, "1A" },
+                    { 2, 1, "1B" },
+                    { 3, 1, "2A" },
+                    { 4, 1, "2B" },
+                    { 5, 2, "1A" },
+                    { 6, 2, "1B" },
+                    { 7, 2, "2A" },
+                    { 8, 2, "2B" }
                 });
 
             migrationBuilder.CreateIndex(
