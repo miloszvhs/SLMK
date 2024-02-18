@@ -1,0 +1,31 @@
+﻿@model SystemLotowMK.Domain.Entities.User
+
+@{
+    ViewData["Title"] = "Account";
+}
+
+<h2>@ViewData["Title"]</h2>
+<div class="view">
+    <table class="table table-bordered table-sm" contenteditable="true">
+        <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.UserName)</th>
+            <th>@Html.DisplayNameFor(model => model.Email)</th>
+            <th>@Html.DisplayNameFor(model => model.PhoneNumber)</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>@Html.DisplayFor(model => model.UserName)</td>
+        </tr>
+        <tr>
+            <td>@Html.DisplayFor(model => model.Email)</td>
+        </tr>
+        <tr>
+            <td>@Html.DisplayFor(model => model.PhoneNumber)</td>
+        </tr>
+        </tbody>
+    </table>
+    <a class="btn btn-primary" href="~/">Back</a>
+</div>
+
